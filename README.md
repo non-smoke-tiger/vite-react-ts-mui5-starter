@@ -26,8 +26,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - ตั้งค่าให้ Font size responsive
 - เพิ่มความสามารถในการกำหนด Scale Font ได้ กรณีต้องมีการขยายขนาดตัวอักษร
-- เพิ่ม pallet Highcontrast เพื่อรองรับ WCAG
-- แยกไฟล์ theme ไว้ใน Folder them เพื่องานต่อการเรียกดูแต่ละส่วน
+- เพิ่ม palette High Contrast เพื่อรองรับ WCAG
+- แยกไฟล์ theme ไว้ใน Folder theme เพื่อง่ายต่อการเรียกดูและแก้ไขแต่ละส่วน
 
 ## React Compiler
 

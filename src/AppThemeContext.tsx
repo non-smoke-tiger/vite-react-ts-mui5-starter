@@ -6,9 +6,10 @@ import {
   createContext,
   useContext,
   useEffect,
+  useState,
 } from 'react';
 
-import { ThemeProvider, type Theme } from '@mui/material/styles';
+import { createTheme, ThemeProvider, type Theme } from '@mui/material/styles';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
@@ -98,7 +99,7 @@ interface AppThemeContextProps {
   /** theme ปัจจุบัน */
   currentTheme: Theme;
   /** browser ตั้งค่า derk mode ไว้หรือไม่ */
-  prefersDarkMode: boolean;
+  systemIsDark: boolean;
   // --- Helper functions ---
   /** เปลี่ยนขนาด Text */
   changeTextSize: (size: TextSize) => void;
@@ -133,6 +134,11 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
 
   /** ค่า system dark mode - คงค่าไว้ใน Provider */
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [systemIsDark, setSystemIsDark] = useState(prefersDarkMode);
+  // useEffect เพื่อ Update state เมื่อ prefersDarkMode เปลี่ยนเท่านั้น
+  useEffect(() => {
+    setSystemIsDark(prefersDarkMode);
+  }, [prefersDarkMode]);
 
   // -- Action Creators (Wrapper Functions) --- //
   /** เปลี่ยนขนาด Font */
@@ -162,26 +168,30 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
   /** ค่า theme ปัจจุบัน */
   const currentTheme = useMemo(() => {
     const scale = textScales[textSize];
+    let baseTheme: Theme;
 
     if (contrastMode) {
-      contrastTheme.typography = getTypography(contrastTheme, scale);
-      return contrastTheme;
+      baseTheme = contrastTheme;
+    } else if (
+      (systemIsDark && colorMode === 'system') ||
+      colorMode === 'dark'
+    ) {
+      baseTheme = darkTheme;
+    } else {
+      baseTheme = theme;
     }
 
-    if ((prefersDarkMode && colorMode === 'system') || colorMode === 'dark') {
-      darkTheme.typography = getTypography(darkTheme, scale);
-      return darkTheme;
-    }
-
-    theme.typography = getTypography(theme, scale);
-    return theme;
-  }, [contrastMode, colorMode, textSize, prefersDarkMode]);
+    // สร้าง Theme ใหม่ จาก Base Theme
+    const newTheme = createTheme(baseTheme);
+    newTheme.typography = getTypography(newTheme, scale);
+    return newTheme;
+  }, [contrastMode, colorMode, textSize, systemIsDark]);
 
   /** ค่าต่างๆ ใน Context (Memoized) */
   const contextValue = useMemo(
     () => ({
       currentTheme,
-      prefersDarkMode,
+      systemIsDark,
       state,
       dispatch,
       changeTextSize,
@@ -190,7 +200,7 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       currentTheme,
-      prefersDarkMode,
+      systemIsDark,
       state,
       dispatch,
       changeTextSize,
