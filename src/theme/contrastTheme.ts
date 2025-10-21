@@ -5,7 +5,7 @@ import components from './components';
 import shape from './shape';
 
 // สร้าง theme โดยใช้ createTheme และ responsiveFontSizes
-const contrastTheme = createTheme({
+const baseTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
@@ -98,6 +98,7 @@ const contrastTheme = createTheme({
 });
 
 // กำหนด typography ด้วยการเรียกใช้ฟังก์ชัน getTypography และส่ง theme ที่สร้างไว้แล้วเข้าไป
+const contrastTheme = createTheme(baseTheme);
 contrastTheme.typography = getTypography(contrastTheme, 1);
 
 export default contrastTheme;

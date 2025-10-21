@@ -5,7 +5,7 @@ import components from './components';
 import shape from './shape';
 
 // สร้าง theme โดยใช้ createTheme และ responsiveFontSizes
-const darkTheme = createTheme({
+const baseTheme = createTheme({
   palette: { ...palette, mode: 'dark' },
   typography: {
     fontFamily: '"Prompt", sans-serif',
@@ -18,6 +18,7 @@ const darkTheme = createTheme({
 });
 
 // กำหนด typography ด้วยการเรียกใช้ฟังก์ชัน getTypography และส่ง theme ที่สร้างไว้แล้วเข้าไป
+const darkTheme = createTheme(baseTheme);
 darkTheme.typography = getTypography(darkTheme, 1);
 
 export default darkTheme;

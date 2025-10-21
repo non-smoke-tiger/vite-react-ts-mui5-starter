@@ -5,7 +5,7 @@ import components from './components';
 import shape from './shape';
 
 // สร้าง theme หลักโดยใช้ createTheme และ responsiveFontSizes
-const theme = createTheme({
+const baseTheme = createTheme({
   palette,
   typography: {
     fontFamily: '"Prompt", sans-serif',
@@ -18,6 +18,7 @@ const theme = createTheme({
 });
 
 // กำหนด typography ด้วยการเรียกใช้ฟังก์ชัน getTypography และส่ง theme ที่สร้างไว้แล้วเข้าไป
-theme.typography = getTypography(theme, 1);
+const theme = createTheme(baseTheme);
+theme.typography = getTypography(baseTheme, 1);
 
 export default theme;
